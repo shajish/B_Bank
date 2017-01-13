@@ -34,7 +34,6 @@ class AuthController extends Controller
             throw new ValidationHttpException($validator->errors()->all());
         }
 
-
         $user= new UserModel();
         $userid=$user->select('id')->where('username',$request->username)->where('password',$request->password)->get();
 

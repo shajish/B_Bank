@@ -19,11 +19,7 @@ class ApiController extends Controller
 
     public function registerUser(Request $request)
     {
-        /*
-          if (!JWTAuth::parseToken()->authenticate()) {
-            return response()->json(['error' => 'Token invalid']);
-        }
-        */
+
         $validator = Validator::make($request->all(), [
             'username' => 'required',
             'password' => 'required',
@@ -63,14 +59,11 @@ class ApiController extends Controller
             $userProfile->save();
         });
         return json_encode('registration success');
-    }// token catch if token , run , else not run
-
+    }
     /* api for-> fetching out blood group*/
     public function getBloodGroup()
     {
-        if (!JWTAuth::parseToken()->authenticate()) {
-            return response()->json(['error' => 'Token invalid']);
-        }
+
         try {
             $category = new CategoryModel();
             $data = $category->all();
@@ -79,8 +72,6 @@ class ApiController extends Controller
             echo $e->getMessage();
         }
         return json_encode($data);
-//        return response()->json($data);
-
     }
 
     public function getUser(Request $request)
