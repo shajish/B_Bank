@@ -166,6 +166,9 @@ return [
         Dingo\Api\Provider\LaravelServiceProvider::class,
         //jwt
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
+        //migration generator
+        Way\Generators\GeneratorsServiceProvider::class,
+        Xethron\MigrationsGenerator\MigrationsGeneratorServiceProvider::class,
         /*
          * Package Service Providers...
          */
