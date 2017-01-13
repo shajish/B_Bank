@@ -18,8 +18,8 @@ $api = app('Dingo\Api\Routing\Router');
 $api->version('v1',['namespace'=>"App\Http\Controllers\Api"], function ($api) {
 
     $api->any('login',['uses' => 'AuthController@Login']);
-    $api->any('BGroups',['uses' => 'ApiController@getBloodGroup']);
-    $api->any('Userlist',['uses' => 'ApiController@getUser']);
+    $api->any('bgroups',['uses' => 'ApiController@getBloodGroup']);
+    $api->any('userlist',['uses' => 'ApiController@getUser']);
     $api->any('register',['uses' => 'ApiController@registerUser']);
     $api->any('active',['uses' => 'ApiController@activateStatus']);
     $api->any('notactive',['uses' => 'ApiController@deactivateStatus']);
