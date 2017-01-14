@@ -32,33 +32,43 @@ class ApiController extends Controller
         if ($validator->fails()) {
             throw new ValidationHttpException($validator->errors()->all());
         }
-
-        DB::transaction(function () use ($request) {
-            $date = date('Y-m-d H:i:s');
-            $user = new UserModel();
-            $user->username = $request['username'];
-            $user->password = $request['password'];
-            $user->created_at = $date;
-            $user->save();
+        try {
+            DB::transaction(function () use ($request) {
+                $date = date('Y-m-d H:i:s');
+                $user = new UserModel();
+                $user->username = $request['username'];
+                $user->password = $request['password'];
+                $user->created_at = $date;
+                $user->save();
 //
-            $user_id = $user->id;
+                $user_id = $user->id;
 
-            $role = new RoleModel();//DB::table('role_users');
-            $role->user_id = $user_id;
-            $role->role = 1;//$request['role'];
-            $role->save();
+                $role = new RoleModel();//DB::table('role_users');
+                $role->user_id = $user_id;
+                $role->role = 1;//$request['role'];
+                $role->save();
 
-            $userProfile = new UserProfileModel();
-            $userProfile->user_id = $user_id;
-            $userProfile->name = $request['name'];
-            $userProfile->email = $request['email'];
-            $userProfile->location = $request['location'];
-            $userProfile->contacts = $request['contacts'];
-            $userProfile->category_id = $request['category_id'];
-            $userProfile->status = 0;
-            $userProfile->save();
-        });
-        return json_encode('registration success');
+                $userProfile = new UserProfileModel();
+                $userProfile->user_id = $user_id;
+                $userProfile->name = $request['name'];
+                $userProfile->email = $request['email'];
+                $userProfile->location = $request['location'];
+                $userProfile->contacts = $request['contacts'];
+                $userProfile->category_id = $request['category_id'];
+                $userProfile->status = 0;
+                $userProfile->save();
+            });
+            return response()->json([
+                'status_code' => 0,
+                'message' => 'Registration success'
+            ]);
+        } catch (Exception $ex) {
+            return response()->json([
+                "status_code" => 1,
+                "message" => "Registration failed"
+            ]);
+        }
+
     }
     /* api for-> fetching out blood group*/
     public function getBloodGroup()
@@ -67,11 +77,17 @@ class ApiController extends Controller
         try {
             $category = new CategoryModel();
             $data = $category->all();
-
+            return response()->json([
+                'status_code' => 0,
+                'data'=>$data
+            ]);
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            return response()->json([
+                'status_code' => 1,
+                'message'=> "Failed to get list of blood group."
+            ]);
         }
-        return json_encode($data);
+
     }
 
     public function getUser(Request $request)
@@ -91,12 +107,23 @@ class ApiController extends Controller
             $userprofile = new UserProfileModel();
             $data = $userprofile->where('category_id', $request->category_id)->get();
             if ($data[0]->id) {
-                return json_encode($data);
+                return response()->json([
+                    'status_code' => 0,
+                    'data'=>$data
+                ]);
             } else {
-                return response()->json(['message' => "cannot find people of requested group"]);
+                return response()->json([
+                    'status_code' => 1,
+                    'message'=>"failed to get list of users of the group"
+                ]);
+
             }
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            return response()->json([
+                'status_code' => 1,
+                'message'=>"failed to get list of users of the group"
+            ]);
+
         }
 
     }
@@ -108,16 +135,26 @@ class ApiController extends Controller
         }
         $user = JWTAuth::parseToken()->toUser();
         $userProfile = new UserProfileModel();
-//        return $user->id;
+
         $status= $userProfile->select('status')->where('user_id',$user->id)->get();
         try {
             if($status[0]->status == 0){
-                return response()->json(['message'=>"You are already active in our system for donating blood"]);
+                return response()->json([
+                    'status_code' => 0,
+                    'message'=>"You are already active in our system for donating blood"
+                ]);
+
             }elseif($userProfile->where('user_id', $user->id)->update(['status' => 0])){
-                return response()->json(['message'=>'Soon you can donate blood :) ']);
+                return response()->json([
+                    'status_code' => 0,
+                    'message'=>'Soon you can donate blood :) '
+                ]);
             }
         } catch (Exception $ex) {
-            return response()->json(['message'=>"Sorry ! Couldnot make your status active. Please Try Again."]);
+            return response()->json([
+                'status_code' => 1,
+                'message'=>"Sorry ! Couldnot make your status active. Please Try Again."
+            ]);
         }
     }
 
@@ -133,20 +170,26 @@ class ApiController extends Controller
         $status= $userProfile->select('status')->where('user_id',$user->id)->get();
         try {
             if($status[0]->status == 1){
-                return response()->json(['message'=>"You are already active in our system for donating blood"]);
+                return response()->json([
+                    'status_code' => 0,
+                    'message'=>"You are already inactive in our system for donating blood"
+                ]);
+//                return response()->json(['message'=>"You are already inactive in our system for donating blood"]);
             }elseif($userProfile->where('user_id', $user->id)->update(['status' => 1])){
-                return response()->json(['message'=>'Take your time. :)' ]);
+                return response()->json([
+                    'status_code' => 0,
+                    'message'=>'Take your time. :)'
+                ]);
+//                return response()->json(['message'=>'Take your time. :)' ]);
             }
         } catch (Exception $ex) {
-            return response()->json(['message'=>"Sorry! Could not made your status deactive. Please Try again"]);
+            return response()->json([
+                'status_code' => 1,
+                'message'=>"Sorry! Could not made your status deactive. Please Try again"
+            ]);
+//            return response()->json(['message'=>"Sorry! Could not made your status deactive. Please Try again"]);
         }
 
-/*
-        if($userProfile->where('user_id', $user->id)->update(['status' => 1])){
-            return "Take your time. :) ";
-        }else{
-            return "Sorry! Could not made your status deactive. Please Try again";
-        }*/
     }
 
 }

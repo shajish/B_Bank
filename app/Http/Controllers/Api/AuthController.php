@@ -42,10 +42,16 @@ class AuthController extends Controller
                 if(!$token=JWTAuth::fromUser($user->find($userid[0]->id))){
                     return response()->json(['error' => 'invalid_credentials'], 401);
                 }else{
-                    return $token;
+                    return response()->json([
+                       'status_code'=>0,
+                        'data'=>$token
+                    ]);
                 }
             } catch (Exception $ex) {
-                return $ex->getMessage();
+                return response()->json([
+                    'status_code'=>1,
+                    'message'=>$ex->getMessage()
+                ]);
             }
         }
     }
