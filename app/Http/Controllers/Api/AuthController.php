@@ -23,7 +23,6 @@ class AuthController extends Controller
      */
     public function Login(Request $request)
     {
-
         $credentials = $request->only(['username', 'password']);
 
         $validator = Validator::make($credentials, [
@@ -39,7 +38,7 @@ class AuthController extends Controller
 
         if($userid[0]->id != NULL){
             try {
-                if(!$token=JWTAuth::fromUser($user->find($userid[0]->id))){
+                if(!$token=JWTAuth::fromUser($user->find($userid[0]->id))){ //token
                     return response()->json(['error' => 'invalid_credentials'], 401);
                 }else{
                     return response()->json([

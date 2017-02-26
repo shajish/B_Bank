@@ -27,5 +27,10 @@ class UserProfiles extends \Illuminate\Database\Eloquent\Model
         return $this->belongsTo('App\Models\Users', 'user_id', 'id');
     }
 
+    public function districts()
+    {
+        return $this->belongsTo('App\Models\Districts', 'district_id', 'id');
+    }
+
 }
 

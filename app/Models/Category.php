@@ -17,6 +17,5 @@ class Category extends \Illuminate\Database\Eloquent\Model
     {
         return $this->hasMany('App\Models\UserProfiles', 'category_id', 'id');
     }
-
 }
 
