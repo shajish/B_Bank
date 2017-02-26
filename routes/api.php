@@ -29,7 +29,7 @@
 
         /*--Authorized token required--*/
         $api->post('userlist', ['uses' => 'ApiController@getUser']);
-        $api->any('active', ['uses' => 'ApiController@activateStatus']);
-        $api->any('notactive', ['uses' => 'ApiController@deactivateStatus']);
+        $api->get('active', ['uses' => 'ApiController@activateStatus']);
+        $api->get('notactive', ['uses' => 'ApiController@deactivateStatus']);
 
     });
