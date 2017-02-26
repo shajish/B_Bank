@@ -28,7 +28,7 @@
         $api->get('district', ['uses' => 'ApiController@getDistricts']);
 
         /*--Authorized token required--*/
-        $api->any('userlist', ['uses' => 'ApiController@getUser']);
+        $api->post('userlist', ['uses' => 'ApiController@getUser']);
         $api->any('active', ['uses' => 'ApiController@activateStatus']);
         $api->any('notactive', ['uses' => 'ApiController@deactivateStatus']);
 
