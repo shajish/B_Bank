@@ -31,5 +31,6 @@
         $api->post('userlist', ['uses' => 'ApiController@getUser']);
         $api->get('active', ['uses' => 'ApiController@activateStatus']);
         $api->get('notactive', ['uses' => 'ApiController@deactivateStatus']);
+        $api->get('logout', ['uses' => 'ApiController@logout']);
 
     });

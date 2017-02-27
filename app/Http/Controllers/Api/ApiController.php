@@ -2,6 +2,7 @@
 
     namespace App\Http\Controllers\Api;
 
+    use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\Validator;
     use App\Http\Controllers\Controller;
     use App\Models\Category as CategoryModel;
@@ -14,6 +15,7 @@
     use Mockery\CountValidator\Exception;
     use Tymon\JWTAuth\Facades\JWTAuth;
     use Dingo\Api\Exception\ValidationHttpException;
+    use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
     class ApiController extends Controller
     {
@@ -118,10 +120,8 @@
                 return response()->json(['error' => 'Token invalid']);
             }
 
-//        return $request->category_id;
             $validator = Validator::make($request->all(), [
                 'category_id' => 'required',
-//            'district_id' => 'required'
             ]);
             if ($validator->fails()) {
                 throw new ValidationHttpException($validator->errors()->all());
@@ -129,7 +129,7 @@
             try {
                 // conditional where clause so queries are required to be stored before get()
                 $userprofile = UserProfileModel::query();
-                $userprofile = $userprofile->where('category_id', $request->category_id);
+                $userprofile = $userprofile->where('category_id', $request->category_id)->where('status',0);
                 if (isset($request->district_id)) {
                     $userprofile = $userprofile->where('district_id', $request->district_id);
                 }
@@ -220,7 +220,26 @@
 
         }
 
+        public function logout(Request $request)
+        {
+            if (!JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['error' => 'Token invalid']);
+            }
+
+            try {
+                if (JWTAuth::parseToken()->invalidate()) {
+                    return response()->json([
+                        'status_code' => 0,
+                        'message'     => "logged out successfully"
+                    ]);
+                } else {
+                    return response()->json([
+                        'status_code' => 0,
+                        'message'     => "You are already inactive in our system for donating blood"
+                    ]);
+                }
+            } catch (Exception $ex) {
+                return $ex->getMessage();
+            }
+        }
     }
-
-
-
