@@ -21,21 +21,20 @@ class AuthController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse|void
      */
-    public function Login(Request $request)
+    public function login(Request $request)
     {
-        $credentials = $request->only(['username', 'password']);
-
+        $credentials = $request->only(['email', 'password']);
         $validator = Validator::make($credentials, [
-            'username' => 'required',
+            'email' => 'required',
             'password' => 'required',
-        ]);
+            ]);
         if($validator->fails()) {
             throw new ValidationHttpException($validator->errors()->all());
         }
 
         $user= new UserModel();
-        $userid=$user->select('id')->where('username',$request->username)->where('password',$request->password)->get();
-
+        // $userid=$user->select('id')->where('email',$request->email)->where('password',$request->password)->firstOrFail();
+        $userid=$user->select('id')->where('email',$request->email)->where('password',$request->password)->get();
         if($userid[0]->id != NULL){
             try {
                 if(!$token=JWTAuth::fromUser($user->find($userid[0]->id))){ //token
@@ -43,15 +42,20 @@ class AuthController extends Controller
                 }else{
                     return response()->json([
                        'status_code'=>0,
-                        'data'=>$token
-                    ]);
+                       'data'=>$token
+                       ]);
                 }
             } catch (Exception $ex) {
                 return response()->json([
                     'status_code'=>1,
                     'message'=>$ex->getMessage()
-                ]);
+                    ]);
             }
+        }else{
+            return response()->json([
+                'status_code'=>1,
+                'message'=>'Sorry, we couldnot log you in with the given credentials. You might want to check the credentials.'
+                ]);
         }
     }
 }

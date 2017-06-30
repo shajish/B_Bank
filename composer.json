@@ -7,7 +7,6 @@
     "require": {
         "php": ">=5.6.4",
         "laravel/framework": "5.3.*",
-
         "dingo/api": "1.0.x@dev",
         "tymon/jwt-auth": "0.5.*"
 
@@ -18,8 +17,8 @@
         "phpunit/phpunit": "~5.0",
         "symfony/css-selector": "3.1.*",
         "symfony/dom-crawler": "3.1.*",
-        "way/generators": "dev-feature/laravel-five-stable",
-        "xethron/migrations-generator": "^2.0"
+        "xethron/migrations-generator": "^2.0",
+        "jimbolino/laravel-model-builder" : "dev-master"
     },
     "autoload": {
         "classmap": [

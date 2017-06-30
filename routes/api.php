@@ -1,7 +1,7 @@
 <?php
 
-    use Illuminate\Http\Request;
-    use \Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Http\Request;
+use \Tymon\JWTAuth\Facades\JWTAuth;
 
     /*
     |--------------------------------------------------------------------------
@@ -19,18 +19,17 @@
     $api->version('v1', ['namespace' => "App\Http\Controllers\Api"], function ($api) {
 
         /*--Authorized token not requried--*/
+        $api->post('login', ['uses' => 'AuthController@login']);
+        $api->post('register', ['uses' => 'UserController@registerUser']);
 
-        /*=> post*/
-        $api->post('login', ['uses' => 'AuthController@Login']);
-        $api->post('register', ['uses' => 'ApiController@registerUser']);
-        /*=> get*/
         $api->get('bgroups', ['uses' => 'ApiController@getBloodGroup']);
-        $api->get('district', ['uses' => 'ApiController@getDistricts']);
+        $api->get('districts', ['uses' => 'ApiController@getDistricts']);
 
         /*--Authorized token required--*/
-        $api->post('userlist', ['uses' => 'ApiController@getUser']);
-        $api->get('active', ['uses' => 'ApiController@activateStatus']);
-        $api->get('notactive', ['uses' => 'ApiController@deactivateStatus']);
+
+        $api->post('userlist', ['uses' => 'UserController@getUser'])->middleware('jwt-auth');
+        $api->get('activate', ['uses' => 'ApiController@activateStatus']);
+        $api->get('deactivate', ['uses' => 'ApiController@deactivateStatus']);
         $api->get('logout', ['uses' => 'ApiController@logout']);
 
     });
