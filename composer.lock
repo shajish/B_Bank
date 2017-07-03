@@ -132,6 +132,7 @@
                 "laravel",
                 "restful"
             ],
+
             "time": "2017-02-10T00:56:04+00:00"
         },
         {
@@ -188,6 +189,7 @@
                 "docs",
                 "laravel"
             ],
+
             "time": "2017-02-11T17:28:57+00:00"
         },
         {
@@ -909,6 +911,7 @@
                 "psr-3"
             ],
             "time": "2017-06-19T01:22:40+00:00"
+
         },
         {
             "name": "mtdowling/cron-expression",
@@ -1569,7 +1572,9 @@
                 "mail",
                 "mailer"
             ],
+
             "time": "2017-05-01T15:54:03+00:00"
+
         },
         {
             "name": "symfony/console",
@@ -1751,6 +1756,7 @@
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
             "time": "2017-06-04T18:15:29+00:00"
+
         },
         {
             "name": "symfony/finder",
@@ -1935,6 +1941,7 @@
             "description": "Symfony HttpKernel Component",
             "homepage": "https://symfony.com",
             "time": "2017-01-28T02:53:17+00:00"
+
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -1994,6 +2001,7 @@
                 "shim"
             ],
             "time": "2017-06-09T14:24:12+00:00"
+
         },
         {
             "name": "symfony/polyfill-php56",
@@ -4262,6 +4270,52 @@
             ],
             "description": "Rapidly generate resources, migrations, models, and much more.",
             "time": "2017-02-23T11:20:49+00:00"
+        },
+        {
+            "name": "xethron/laravel-4-generators",
+            "version": "3.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Xethron/Laravel-4-Generators.git",
+                "reference": "526f0a07d8ae44e365a20b1bf64c9956acd2a859"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Xethron/Laravel-4-Generators/zipball/526f0a07d8ae44e365a20b1bf64c9956acd2a859",
+                "reference": "526f0a07d8ae44e365a20b1bf64c9956acd2a859",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "~5.0",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "behat/behat": "~2.5.1",
+                "behat/mink": "~1.5.0",
+                "behat/mink-extension": "~1.2.0",
+                "behat/mink-goutte-driver": "~1.0.9",
+                "behat/mink-selenium2-driver": "~1.1.1",
+                "phpspec/phpspec": "~2.0",
+                "phpunit/phpunit": "~3.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Way\\Generators": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jeffrey Way",
+                    "email": "jeffrey@jeffrey-way.com"
+                }
+            ],
+            "description": "Rapidly generate resources, migrations, models, and much more.",
+            "time": "2017-02-23 11:20:49"
         },
         {
             "name": "xethron/migrations-generator",
