@@ -14,12 +14,7 @@ class Events extends \Illuminate\Database\Eloquent\Model
         return array('date');
     }
 
-    protected $fillable = array('title', 'details', 'location', 'date', 'duration');
-
-    public function statuses()
-    {
-        return $this->belongsTo('App\Models\Statuses', 'status_id', 'id');
-    }
+    protected $fillable = array('title', 'details', 'location', 'date', 'duration', 'status', 'remark');
 
     public function users()
     {
