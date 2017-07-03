@@ -26,10 +26,12 @@ use \Tymon\JWTAuth\Facades\JWTAuth;
         $api->get('districts', ['uses' => 'ApiController@getDistricts']);
 
         /*--Authorized token required--*/
-
         $api->post('userlist', ['uses' => 'UserController@getUser'])->middleware('jwt-auth');
+        $api->post('addevents',['uses' => 'EventsController@addEvents'])->middleware('jwt-auth');
+
         $api->get('activate', ['uses' => 'ApiController@activateStatus']);
         $api->get('deactivate', ['uses' => 'ApiController@deactivateStatus']);
         $api->get('logout', ['uses' => 'ApiController@logout']);
+
 
     });
