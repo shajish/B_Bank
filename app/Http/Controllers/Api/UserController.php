@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Validator;
 use App\User                as UserModel;
 use App\Models\RoleUsers    as RoleModel;
 use App\Models\UserProfiles as UserProfileModel;
-use App\Http\Controllers\Api\ApiController;
 
 class UserController extends Controller
 {
@@ -87,15 +86,15 @@ class UserController extends Controller
             if($userprofile->count() > 0 ){
                 $data = $userprofile->get();
                 if ($data[0]->id) {
-                    return $apiControllerObject->apiResponse('success',$data);
+                    return apiResponse('success',$data);
                 } else {
-                    return $apiControllerObject->apiResponse('failed',"failed to get list of users of the group");
+                    return apiResponse('failed',"failed to get list of users of the group");
                 }
             }else{
-                return $apiControllerObject->apiResponse('failed',"No data found.");
+                return apiResponse('failed',"No data found.");
             }
         } catch (PDOException $e) {
-            return $apiControllerObject->apiResponse('failed',"failed to get list of users of the group");
+            return apiResponse('failed',"failed to get list of users of the group");
         }
     }
 }
