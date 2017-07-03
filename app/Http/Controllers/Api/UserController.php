@@ -52,8 +52,8 @@ class UserController extends Controller
                 $userProfile->address1       = $request['district_id'];
                 $userProfile->address2       = $request['address2'];
                 $userProfile->contacts       = $request['contacts'];
-                    $userprofile->status         = 1; // Not available
-                    $userProfile->save();
+                $userprofile->status         = 1; // Not available
+                $userProfile->save();
                 });
             return response()->json([
                 'status_code' => 0,
