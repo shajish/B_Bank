@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'username', 'email', 'password',
     ];
 
     /**
@@ -27,6 +27,19 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+public function donationHistories()
+    {
+        return $this->hasOne('App\Models\DonationHistories', 'id', 'id');
+    }
+     public function events()
+    {
+        return $this->hasMany('App\Models\Events', 'user_id', 'id');
+    }
+    
+    public function notifications()
+    {
+        return $this->hasMany('App\Models\Notifications', 'user_id', 'id');
+    }
     public function roleUsers()
     {
         return $this->hasMany('App\Models\RoleUsers', 'user_id', 'id');

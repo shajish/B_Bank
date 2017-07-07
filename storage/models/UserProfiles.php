@@ -9,7 +9,7 @@ class UserProfiles extends \Illuminate\Database\Eloquent\Model
 {
     protected $table = 'user_profiles';
 
-    protected $fillable = array('name', 'address2', 'contacts', 'status');
+    protected $fillable = array('name', 'address2', 'contacts', 'status' ,'address1','blood_group_id' ,'user_id');
 
     public function users()
     {
