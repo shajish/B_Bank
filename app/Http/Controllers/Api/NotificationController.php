@@ -19,8 +19,13 @@ class NotificationController extends Controller
     public function displayNotifications()
     {
     	try {
-    		$data=DB::table('notifications')->get();
-    		return apiResponse('success','',$data);
+    		$data=DB::table('notifications');
+    		if($data->count() > 0){
+    			$data->get();
+    			return apiResponse('success','',$data);
+    		}else{
+    			return apiResponse('failed','There are no notifications to display');
+    		}
     	} catch (Exception $e) {
     		return apiResponse('failed','Failed to fetch notification informations');
     	}
@@ -106,5 +111,5 @@ class NotificationController extends Controller
     		return apiResponse('failed','Couldnot update the notification information.');
     	}
     }
- 
+
 }
