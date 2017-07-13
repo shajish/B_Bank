@@ -21,6 +21,8 @@ class UserController extends Controller
             'password'       => 'required',
             'blood_group_id' => 'required',
             'name'           => 'required',
+            'age'            => 'required',
+            'gender'         => 'required',
             'district_id'    => 'required',
             'address2'       => 'required',
             'contacts'       => 'required',
@@ -55,6 +57,8 @@ class UserController extends Controller
                 $userProfile->address1       = $request['district_id'];
                 $userProfile->address2       = $request['address2'];
                 $userProfile->contacts       = $request['contacts'];
+                $userProfile->age            = $request['age'];
+                $userProfile->gender         = $request['gender'];
                 $userProfile->status         = 1; // Not available
                 $userProfile->save();
             });
@@ -77,7 +81,7 @@ class UserController extends Controller
            ->join('user_profiles','users.id','=','user_id')
            ->join('districts','districts.id','=','user_profiles.address1')
            ->join('blood_groups','blood_groups.id','=','user_profiles.blood_group_id')
-           ->select( 'users.id', 'users.username', 'user_profiles.name','blood_groups.name as blood_group', 'email', 'districts.name as address1','address2','contacts','status' );
+           ->select( 'users.id', 'users.username', 'user_profiles.name','blood_groups.name as blood_group', 'email', 'districts.name as address1','address2','contacts','age','gender','status' );
          //->where('user_profiles.blood_group_id',$request->blood_group_id);
 
 
