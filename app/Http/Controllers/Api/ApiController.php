@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+use Dingo\Api\Exception\ValidationHttpException;
 use App\Models\BloodGroups as BloodGroupModel;
 use App\User as UserModel;
 use App\Models\RoleUsers as RoleModel;
@@ -14,58 +16,45 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Mockery\CountValidator\Exception;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use Dingo\Api\Exception\ValidationHttpException;
+
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class ApiController extends Controller
 {
 
- 
-
-    /* api for-> fetching out blood group*/
+    /**
+     * Gets the blood group.
+     * @return     < json >  The blood group.
+     */
     public function getBloodGroup()
     {
         try {
             $category = new BloodGroupModel();
             $data     = $category->all();
-            return response()->json([
-                'status_code' => 0,
-                'data'        => $data
-                ]);
+            return apiResponse('success','',$data);
         } catch (PDOException $e) {
-            return response()->json([
-                'status_code' => 1,
-                'message'     => "Failed to get list of blood group."
-                ]);
+            return apiResponse('failed','Failed to get list of blood group.');
         }
-
     }
 
+    /**
+     * Gets the districts.
+     * @return     <json api>  The districts.
+     */
     public function getDistricts()
     {
         try {
             $districts = new DistrictModel();
             $data      = $districts->all();
-            return response()->json([
-                'status_code' => 0,
-                'data'        => $data
-                ]);
+            return apiResponse('success','',$data);
         } catch (Exception $ex) {
-            return response()->json([
-                'status_code' => 1,
-                'message'     => "Failed to get list of districts."
-                ]);
-            return $ex->getMessage();
+            return apiResponse('failed',"Failed to get list of districts.");
         }
-
     }
 
 
     public function activateStatus(Request $request)
     {
-        // if (!JWTAuth::parseToken()->authenticate()) {
-        //     return response()->json(['error' => 'Token invalid']);
-        // }
         $user        = JWTAuth::parseToken()->toUser();
         $userProfile = new UserProfileModel();
         $status = $userProfile->select('status')->where('user_id', $user->id)->get();
@@ -75,30 +64,22 @@ class ApiController extends Controller
 
             }
             if ($status[0]->status == 0) {
-                return response()->json([
-                    'status_code' => 0,
-                    'message'     => "You are already active in our system for donating blood"
-                    ]);
-
+                return apiResponse('success','You are already active in our system for donating blood');
             } elseif ($userProfile->where('user_id', $user->id)->update(['status' => 0])) {
-                return response()->json([
-                    'status_code' => 0,
-                    'message'     => 'Thank you for updating your status. We will give you informations about any blood donation requirements.'
-                    ]);
+                return apiResponse('success','Thank you for updating your status. We will give you informations about any blood donation requirements.');
             }
         } catch (Exception $ex) {
-            return response()->json([
-                'status_code' => 1,
-                'message'     => "Sorry ! Couldnot make your status active. Please Try Again."
-                ]);
+            return apiResponse('failed','Sorry ! Couldnot make your status active. Please Try Again.');
         }
     }
 
+    /**
+     * { Deactivate the user availability }
+     * @param      \Illuminate\Http\Request  $request  The request
+     * @return     < json api >                    
+     */
     public function deactivateStatus(Request $request)
     {
-        // if (!JWTAuth::parseToken()->authenticate()) {
-        //     return response()->json(['error' => 'Token invalid']);
-        // }
         $user        = JWTAuth::parseToken()->toUser();
         $id          = $user->id;
         $userProfile = new UserProfileModel();
@@ -113,41 +94,23 @@ class ApiController extends Controller
         } catch (Exception $ex) {
             return $this->apiResponse('failed',"Sorry! Could not made your status deactive. Please Try again");
         }
-
     }
-
-    public function logout(Request $request)
-    {
-        // if (!JWTAuth::parseToken()->authenticate()) {
-        //     return $this->apiResponse('failed','Token invalid');
-        // }
-
-        try {
-            if (JWTAuth::parseToken()->invalidate()) {
-                return $this->apiResponse('success',"logged out successfully");
-            } else {
-                return $this->apiResponse('success',"You are already inactive in our system for donating blood");
-            }
-        } catch (Exception $ex) {
-            return $ex->getMessage();
-        }
-    }
-
-     /**
-     * [ To send well formatted api response ]
-     * @param  [ String ] $type    [ "success" / "failed" ]
-     * @param  [ String ] $message [ Message to be send with response. ]
-     * @return [json object]          
+    
+    /**
+     * { To refresh the expired token }
+     * @param      \Illuminate\Http\Request  $request  The request
+     * @return     <json>                    
      */
-    function apiResponse($type,$message){
-        if($type == 'success'){
-            $status_code = 0;
-        }elseif ($type == 'failed') {
-            $status_code = rand(1,4);
+    public function RefreshToken(Request $request){
+        try
+        {
+            $refreshed = JWTAuth::refresh($request['token']);
+            return apiResponse('success','token Refreshed',$refreshed);
         }
-        return response()->json([
-            'status_code' => $status_code,
-            'message'     => $message
-            ]);
+        catch (JWTException $e)
+        {
+            return apiResponse('failed','Token is  not refreshable');
+        }
     }
+
 }

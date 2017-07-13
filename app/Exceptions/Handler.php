@@ -44,6 +44,11 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        //------Debugging with echo----
+        echo "<pre>";
+        print_r($exception);
+        die();
+        //-----------------------------
         return parent::render($request, $exception);
     }
 

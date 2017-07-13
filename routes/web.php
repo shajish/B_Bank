@@ -13,8 +13,7 @@
 // Route::get('/generate/models', '\\Jimbolino\\Laravel\\ModelBuilder\\ModelGenerator5@start');
 
 Route::get('/', function () {
-    
-   return view('welcome');
+	return DB::table('notifications')->get();
 });
 /*
 
